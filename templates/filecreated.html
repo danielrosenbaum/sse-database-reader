@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+ 
+<head>
+    <title>Database Reader | File Created</title>
+ 
+    <link rel="stylesheet" type="text/css" href="/static/styles/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/styles/jumbotron-narrow.css">
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <link rel="stylesheet" type="text/css" href="/static/styles/jquery-ui.css">
+
+    <style>
+        a:hover {text-decoration: none;}
+    </style>
+    <style>
+        table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        td, th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #dddddd;
+        }
+    </style>
+ 
+</head>
+
+ 
+<body>
+
+    <div class="container">
+        <div class="header">
+            <nav>
+                <ul class="nav nav-pills pull-right">
+                    <li id="taskOneButton" role="presentation"><a href="taskOne">Task One</a>
+                    </li>
+                    <li id="taskTwoButton" role="presentation"><a href="taskTwo">Task Two</a>
+                    </li>
+                    <li id="taskThreeButton" role="presentation"><a href="/taskThree">Task Three</a>
+                    </li>
+                    <li id="taskFourButton" role="presentation"><a href="/taskFour">Task Four</a>
+                    </li>
+                </ul>
+            </nav>
+            <a href="/">
+            <h2 class="text-muted" style="color: steelblue">SSE Database Reader</h2>
+            </a>
+        </div>
+
+        <h3 id="default_task" style="color: cornflowerblue">New File!</h3>
+
+        <span>Your new file: </span><span style="font-size: 17px; color: gray;"> {{ file_name }}</span>
+
+        <br>
+        <br>
+        
+        <form action="/download" method="POST">
+            <p>To download the file please click the button:</p>
+            <input type="hidden" name="download_name" id="download_name" value="{{ file_name }}">
+            <input type="hidden" name="download_file" id="download_file" value="{{ download }}">
+            <input type="submit" value="Download">
+        </form>
+
+        <br>
+        
+        <p>Please select a task to run another query.</p>
+        
+        <p>Below is your data.</p>
+
+        <table id="data_table"></table>
+
+        <script type="text/javascript">
+            var results = {{ data|tojson }};
+            var cols = {{ columns|tojson }};
+
+            var to_print = "<tr><th> " + cols.replace(/,/gi, "</th><th>") + "</th></tr>";
+
+            for (var i = 0; i < results.length; i++) {
+                var row = results[i].toString();
+                to_print += "<tr><td> " + row.replace(/,/gi, "</td><td>") + "</td></tr>";
+            }
+            document.getElementById("data_table").innerHTML = to_print;
+
+        </script>
+
+        <br>
+
+        <footer class="footer">
+            <p>&copy; Daniel Rosenbaum 2017</p>
+        </footer>
+ 
+    </div>
+</body>
+ 
+</html>

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+ 
+<head>
+    <title>Database Reader | Task One</title>
+ 
+    <link rel="stylesheet" type="text/css" href="/static/styles/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/styles/jumbotron-narrow.css">
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <link rel="stylesheet" type="text/css" href="/static/styles/jquery-ui.css">
+
+    <script src="/static/javascripts/jquery-1.12.4.js"></script>
+    <script src="/static/javascripts/jquery-ui.js"></script>
+    
+    <script>
+
+      $( function() {
+        var dateFormat = "mm/dd/yy",
+            from = $( ".from_date" ).datepicker({
+                defaultDate: new Date(2013, 1 - 1, 01),
+                minDate: new Date(2013, 1 - 1, 1),
+                maxDate: new Date(2016, 12 - 1, 31),              
+                changeMonth: true,
+                changeYear: true,
+                yearRange: '2013:2016',
+                numberOfMonths: 1
+            })
+            .on( "change", function() {
+              to.datepicker( "option", "minDate", getDate(this));
+            }),
+            to = $( ".to_date" ).datepicker({
+                defaultDate: new Date(2016, 12 - 1, 31),
+                minDate: new Date(2013, 1 - 1, 1),
+                maxDate: new Date(2016, 12 - 1, 31),
+                changeMonth: true,
+                changeYear: true,
+                yearRange: '2013:2016',
+                numberOfMonths: 1
+          })
+          .on( "change", function() {
+            from.datepicker( "option", "maxDate", getDate(this) );
+          });
+     
+        function getDate(element) {
+          var date;
+          try {
+            date = $.datepicker.parseDate( dateFormat, element.value );
+          } catch( error ) {
+            date = null;
+          }
+     
+          return date;
+        }
+      } );
+
+    </script>
+
+    <style>
+        a:hover {text-decoration: none;}
+    </style>
+ 
+</head>
+
+ 
+<body>
+
+    <div class="container">
+        <div class="header">
+            <nav>
+                <ul class="nav nav-pills pull-right">
+                    <li id="taskOneButton" role="presentation" class="active"><a href="#">Task One</a>
+                    </li>
+                    <li id="taskTwoButton" role="presentation"><a href="taskTwo">Task Two</a>
+                    </li>
+                    <li id="taskThreeButton" role="presentation"><a href="taskThree">Task Three</a>
+                    </li>
+                    <li id="taskFourButton" role="presentation"><a href="taskFour">Task Four</a>
+                    </li>
+                </ul>
+            </nav>
+            <a href="/">
+                <h2 class="text-muted" style="color: steelblue">SSE Database Reader</h2>
+            </a>
+        </div>
+
+
+        <div id="task_one">
+
+            <form action="/queryHandler" method="POST">
+                <h3 for="task" style="color: cornflowerblue">Task One</h3>
+                <input type="hidden" id="task" name="task" value="taskOne">
+
+                <br>
+
+                <h4 style="color: grey">Please select the date range:</h4>
+                <label for="from_date">From</label>
+                <input class="from_date" type="text" id="from_date_T1" name="from_date">
+                <label for="to_date">to</label>
+                <input class="to_date" type="text" id="to_date_T1" name="to_date">
+
+                <br>
+                <br>
+
+                <h4 style="color: grey">Please select the variables:</h4>
+                <label for="margin_stock_mv">Margin Stock (market value)</label>
+                <input type="checkbox" name="margin_stock_mv" id="margin_stock_mv">
+
+                <label style="padding-left: 15px" for="margin_flow_mv">Margin Flow (market value)</label>
+                <input type="checkbox" name="margin_flow_mv" id="margin_flow_mv">
+
+                <label style="padding-left: 15px" for="short_stock_shares">Short Stock (shares)</label>
+                <input type="checkbox" name="short_stock_shares" id="short_stock_shares">
+
+                <label for="short_stock_mv">Short Stock (market value)</label>
+                <input type="checkbox" name="short_stock_mv" id="short_stock_mv">
+
+                <label style="padding-left: 15px" for="short_flow_mv">Short Flow (market value)</label>
+                <input type="checkbox" name="short_flow_mv" id="short_flow_mv">
+
+                <label style="padding-left: 15px" for="margin_short_total_stock_mv">Margin Short Total Stock (market value)</label>
+                <input type="checkbox" name="margin_short_total_stock_mv" id="margin_short_total_stock_mv">
+
+                <br>
+                <br>
+
+                <h4 style="color: grey">Complete your query:</h4>
+                <input type="submit" name="submit_button" id="submit_button">
+
+            </form>
+        </div>
+
+        <br>
+
+        <footer class="footer">
+            <p>&copy; Daniel Rosenbaum 2017</p>
+        </footer>
+ 
+    </div>
+</body>
+ 
+</html>
