@@ -56,20 +56,40 @@ def queryHandler():
 
 		from_date_val = int(from_year + from_month + from_day)
 		to_date_val = int(to_year + to_month + to_day)
-
-		# get the columns 
-		columns = "date"
-		for col in request.form:
-			if col != "from_date" and col != "to_date" and col != "submit_button" and col != "task":
-				columns += ", " + col
+ 
 
 		# open the connection with MySQL
 		conn = mysql.connect()
 		cursor = conn.cursor()
 
 		# write and execute the query
-		query = "SELECT " + columns + " FROM " + task_db + " WHERE date BETWEEN %s AND %s"
-		cursor.execute(query, (from_date_val, to_date_val))
+		# check for column names and hard code in the table name to avoid SQL injections 
+		if (task_db == "taskOne"):
+			# get the columns 
+			columns = "date"
+			for col in request.form:
+				if (col == "margin_stock_mv" or col == 'margin_flow_mv' 
+					or col == 'short_stock_shares' 
+					or col == 'short_stock_mv' 
+					or col == 'short_flow_mv' 
+					or col == 'margin_short_total_stock_mv'):
+					columns += ', ' + col
+            # execute the query from task one table
+			cursor.execute("SELECT " + columns + " FROM taskOne WHERE date BETWEEN %s AND %s", ( from_date_val, to_date_val ))
+		
+		if (task_db == "taskTwo"):
+			columns = "date"
+			for col in request.form:
+				if (col == "company_code" or col == 'company_name' 
+					or col == 'finance_more' 
+					or col == 'finance_buy' 
+					or col == 'finance_comp' 
+					or col == 'trading_margin'
+					or col == 'margin_amt' 
+					or col == 'margin_repay'):
+					columns += ', ' + col
+            # execute the query from task two table
+			cursor.execute("SELECT " + columns + " FROM taskTwo WHERE date BETWEEN %s AND %s", ( from_date_val, to_date_val ))
 
 		# get the results from the database
 		data = cursor.fetchall()
